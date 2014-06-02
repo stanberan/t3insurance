@@ -9,20 +9,48 @@ public class BboxData {
 	private float ln;
 	private float al;
 	private int sp;
-	private int ax_min;
-	private int ax_max;
-	private int ax_avg;
-	private int ay_min;
-	private int ay_max;
-	private int ay_avg;
-	private int az_min;
-	private int az_max;
-	private int az_avg;
+	private double ax_min;
+	private double ax_max;
+	private double ax_avg;
+	private double ay_min;
+	private double ay_max;
+	private double ay_avg;
+	private double az_min;
+	private double az_max;
+	private double az_avg;
 	private int temp;
 	private String time="00-00-00 00:00:00";
 	private String tm="00-00-00 00:00:00";
 	private int cs;
-	private float batt;
+	private float batt;	
+	private int cornering_level;
+	private int braking_level;
+	private int distance;
+	
+	String prefixes="PREFIX ttt:<http://t3.abdn.ac.uk/ontologies/t3.owl#"+
+	"				 PREFIX iota:<http://t3.abdn.ac.uk/ontologies/iota.owl#"
+	+ "           prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> "+
+			"";
+					
+	
+	public int getCornering_level() {
+		return cornering_level;
+	}
+	public void setCornering_level(int cornering_level) {
+		this.cornering_level = cornering_level;
+	}
+	public int getBraking_level() {
+		return braking_level;
+	}
+	public void setBraking_level(int braking_level) {
+		this.braking_level = braking_level;
+	}
+	public int getDistance() {
+		return distance;
+	}
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
 	public String getUniqueID() {
 		return uniqueID;
 	}
@@ -59,58 +87,58 @@ public class BboxData {
 	public void setSp(int sp) {
 		this.sp = sp;
 	}
-	public int getAx_min() {
+	public double getAx_min() {
 		return ax_min;
 	}
-	public void setAx_min(int ax_min) {
+	public void setAx_min(double ax_min) {
 		this.ax_min = ax_min;
 	}
-	public int getAx_max() {
+	public double getAx_max() {
 		return ax_max;
 	}
-	public void setAx_max(int ax_max) {
+	public void setAx_max(double ax_max) {
 		this.ax_max = ax_max;
 	}
-	public int getAx_avg() {
+	public double getAx_avg() {
 		return ax_avg;
 	}
-	public void setAx_avg(int ax_avg) {
+	public void setAx_avg(double ax_avg) {
 		this.ax_avg = ax_avg;
 	}
-	public int getAy_min() {
+	public double getAy_min() {
 		return ay_min;
 	}
-	public void setAy_min(int ay_min) {
+	public void setAy_min(double ay_min) {
 		this.ay_min = ay_min;
 	}
-	public int getAy_max() {
+	public double getAy_max() {
 		return ay_max;
 	}
-	public void setAy_max(int ay_max) {
+	public void setAy_max(double ay_max) {
 		this.ay_max = ay_max;
 	}
-	public int getAy_avg() {
+	public double getAy_avg() {
 		return ay_avg;
 	}
-	public void setAy_avg(int ay_avg) {
+	public void setAy_avg(double ay_avg) {
 		this.ay_avg = ay_avg;
 	}
-	public int getAz_min() {
+	public double getAz_min() {
 		return az_min;
 	}
-	public void setAz_min(int az_min) {
+	public void setAz_min(double az_min) {
 		this.az_min = az_min;
 	}
-	public int getAz_max() {
+	public double getAz_max() {
 		return az_max;
 	}
-	public void setAz_max(int az_max) {
+	public void setAz_max(double az_max) {
 		this.az_max = az_max;
 	}
-	public int getAz_avg() {
+	public double getAz_avg() {
 		return az_avg;
 	}
-	public void setAz_avg(int az_avg) {
+	public void setAz_avg(double az_avg) {
 		this.az_avg = az_avg;
 	}
 	public int getTemp() {

@@ -87,7 +87,7 @@ public class MyResource {
     	ObjectMapper mapper=new ObjectMapper();
     	mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     	BboxData dat=mapper.readValue(data,BboxData.class);
-    return	dat.toString()+d.registerData(dat);
+    return	d.registerData(dat);
     	
     }
     
