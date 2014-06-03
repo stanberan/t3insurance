@@ -51,7 +51,7 @@ public class ProvTrack {
 	public static void sendProv(){
 		
 		String prefixes="@prefix : <"+bbox_ns+"> . ";
-		String body="{\"body\":\"@prefix bbox: <"+bbox_prefix+"> ."+"@prefix prov: <"+prov_prefix+"> ."+"@prefix ttt: <"+ttt_prefix+"> .";
+		String body="{\"body\":\"@prefix bbox: <"+bbox_prefix+"> ."+"@prefix prov: <"+prov_prefix+"> ."+"@prefix ttt: <"+ttt_prefix+"> ."+"@prefix xsd:<http://www.w3.org/2001/XMLSchema>.";
 				
 				
 				for (int i=0; i<provTrack.size();i++){
