@@ -10,14 +10,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
+import org.json.JSONObject;
 
 import uk.ac.abdn.t3.model.BboxData;
 import uk.ac.abdn.t3.model.DB;
+import uk.ac.abdn.t3.model.ProvTrack;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -34,7 +37,7 @@ public class MyResource {
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getIt(@DefaultValue("-10") @QueryParam("temp") int temp, 
+    public int getIt(@DefaultValue("-10") @QueryParam("temp") int temp, 
     @DefaultValue("-10") @QueryParam("sp") int speed,
     @QueryParam("ax_min") int ax_min,
     @QueryParam("ax_max") int ax_max,
@@ -80,16 +83,29 @@ public class MyResource {
     }
     
     
+    
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String getReadings(String data) throws JsonParseException, JsonMappingException, IOException{
+    public Response getReadings(String data) throws JsonParseException, JsonMappingException, IOException{
     	ObjectMapper mapper=new ObjectMapper();
     	mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     	BboxData dat=mapper.readValue(data,BboxData.class);
-    return	d.registerData(dat);
+    int i=	d.registerData(dat);
+    JSONObject json=new JSONObject();
+    if(i==1){
+    	json.put("collected", true);
+    	json.put("agent", ProvTrack.bbox_ns+"BboxServer");
+    	return Response.ok().entity(json.toString()).build();
+    
+    }
+    else{
+    	json.put("collected", false);
+    }
+ 	return Response.ok().entity(json.toString()).build();
     	
     }
     
+  
     
 }

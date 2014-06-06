@@ -10,9 +10,12 @@ import java.util.ArrayList;
 
 
 
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import uk.ac.abdn.t3.model.AnalyseTimer;
 import uk.ac.abdn.t3.model.Client;
@@ -23,7 +26,13 @@ import uk.ac.abdn.t3.model.ProvTrack;
 @Path("check")
 public class Check {
 
-
+	  @GET
+	    @Path("performance/toggle")
+	    @Produces(MediaType.TEXT_PLAIN)
+	    public String activatePerf(){
+		 DataAnalyzer.SHARE_DATA=!DataAnalyzer.SHARE_DATA;
+		  return ""+DataAnalyzer.SHARE_DATA;
+	  }
 	
 	@GET
 	@Path("premiums/once")
@@ -34,7 +43,7 @@ public class Check {
 		for(int i=0;i<clients.size();i++){
 			DataAnalyzer analyse=new DataAnalyzer();
 			analyse.calculatePremium(clients.get(i));
-			ProvTrack.sendProv();
+		
 			
 		}
 		

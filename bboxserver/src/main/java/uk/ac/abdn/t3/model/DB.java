@@ -76,7 +76,7 @@ public class DB {
 		 
 		 
 	 }
-	 public String registerData(BboxData d) {
+	 public int registerData(BboxData d) {
 		 
 			try{
 				if(conn.isClosed()){
@@ -115,11 +115,11 @@ public class DB {
 
 			int i= pStatement.executeUpdate();
 			System.out.println("Result is"+i);
-			return "Succesfullly logged...";
+			return 1;
 			}
 			catch(Exception e){
 				e.printStackTrace();
-				return "Something went wrong when saving to DB:"+e.getMessage();
+				return 0;
 			}
 		}
 

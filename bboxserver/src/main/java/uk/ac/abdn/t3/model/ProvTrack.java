@@ -10,12 +10,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 public class ProvTrack {
-	static String DEVICE_ID="BboxSimulatorV2";
+	
 	static ArrayList<String> provTrack=new ArrayList<String>();
 	static String type="<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "; //space
 	static String ttt_ns="ttt:";static String ttt_prefix="http://t3.abdn.ac.uk/ontologies/t3.owl#";
 	static String prov_ns="prov:";static String prov_prefix="http://www.w3.org/ns/prov#";
-	static String bbox_ns="bbox:"; static String bbox_prefix="http://t3.abdn.ac.uk/bbox/data#";
+	public static String bbox_ns="bbox:"; static String bbox_prefix="http://t3.abdn.ac.uk/t3v2/1/device/"+Configuration.TTT_DEV_ID+"/";
 	
 	
 	static String wasAssociatedWith=prov_ns+"wasAssociatedWith ";
@@ -67,13 +67,13 @@ System.out.println(body);
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
 		try {
-		    HttpPost request = new HttpPost("http://localhost:8080/t3v2/upload/"+DEVICE_ID+"/prov");
+		    HttpPost request = new HttpPost("http://localhost:8080/t3v2/1/device/upload/"+Configuration.TTT_DEV_ID+"/prov");
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);
 		   HttpResponse resp= httpClient.execute(request);
 		  System.out.println("StatusCode: "+ resp.getStatusLine().getStatusCode());
-		// handle response here...
+	
 		} catch (Exception ex) {
 		   ex.printStackTrace();
 		} finally {
