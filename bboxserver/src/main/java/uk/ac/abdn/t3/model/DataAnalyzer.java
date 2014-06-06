@@ -139,6 +139,7 @@ public class DataAnalyzer {
 	ProvTrack.addStatement(usage+" "+ProvTrack.type+ProvTrack.Usage);
 	ProvTrack.addStatement(usage+" "+ProvTrack.purpose+"\\\"Using data to calculate premiums\\\"^^xsd:string");
 	ProvTrack.addStatement(usage+" "+ProvTrack.entity +accData);
+	ProvTrack.addStatement(usage+" "+ProvTrack.qualifiedUsage+ act);
 	ProvTrack.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
 	
 	if(SHARE_DATA){

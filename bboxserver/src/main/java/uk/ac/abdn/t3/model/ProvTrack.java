@@ -30,6 +30,8 @@ public class ProvTrack {
     static String PersonalData=ttt_ns+"PersonalData";
     static String purpose=ttt_ns+"purpose ";
     static String description=ttt_ns+"description ";
+    static String qualifiedUsage=prov_ns+"qualifiedUsage ";
+
    static String SP=" ";
    static String DT=".";
    
