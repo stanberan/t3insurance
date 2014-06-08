@@ -9,6 +9,13 @@ public class BboxData {
 	private float ln;
 	private float al;
 	private int sp;
+	private String provid;
+	public String getProvid() {
+		return provid;
+	}
+	public void setProvid(String provid) {
+		this.provid = provid;
+	}
 	private double ax_min;
 	private double ax_max;
 	private double ax_avg;

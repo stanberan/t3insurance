@@ -42,6 +42,7 @@ public class DataAnalyzer {
 
    String act;
    String usage;
+   String provid;
 	public void calculatePremium(Client u){	
 		int low_turns=0 ;     // 1.001; %
 		int medium_turns=0;   // 1.003; %
@@ -54,8 +55,9 @@ public class DataAnalyzer {
 		int speeding=0; 
 		
 		act=ProvTrack.bbox_ns+"CalculatePremium"+new Date().getTime();
-		String accData=ProvTrack.bbox_ns+"ACCEntity"+new Date().getTime();
-		String speedData=ProvTrack.bbox_ns+"SpeedEntity"+new Date().getTime();
+	//	String actACC=ProvTrack.bbox_ns+"ActivityACC"+new Date().getTime();
+		//String accData=ProvTrack.bbox_ns+"ACCEntity"+new Date().getTime();
+		//String speedData=ProvTrack.bbox_ns+"SpeedEntity"+new Date().getTime();
 		usage=ProvTrack.bbox_ns+"Usage"+new Date().getTime();
 		
 		String deviceid=u.getDeviceid();
@@ -75,6 +77,7 @@ public class DataAnalyzer {
 		else{
 			SEND=true;
 		}
+		boolean first=true;
 		while(rs.next()){
 			int cornering=rs.getInt("cornering_level");
 			int braking=rs.getInt("braking_level");
@@ -101,9 +104,13 @@ public class DataAnalyzer {
 			if(speed>SPEED){
 				speeding++;
 			}
+			if(first){
+				first=false;
+			provid=rs.getString("provid");
+			}
 		}
-		//check speeding
-		
+	
+		if(provid.equals("")){return;}
 		
 	}
 	catch(Exception e){
@@ -122,29 +129,41 @@ public class DataAnalyzer {
 	
 	//share data for response --location --
 	
+	String rawACCEnt=ProvTrack.bbox_ns+"Acc"+provid;
+	//String rawLocation=ProvTrack.bbox_ns+"Location"+provid;
+	String speed=ProvTrack.bbox_ns+"Speed"+provid;
+	
+	
+	
+	
+//	ProvTrack.addStatement(actACC+" "+ProvTrack.type+ProvTrack.Activity);
+//	ProvTrack.addStatement(actACC+" "+ProvTrack.wasAssociatedWith + agent_resource);
+//	ProvTrack.addStatement(accData+" "+ProvTrack.wasGeneratedBy + actACC);
+//	ProvTrack.addStatement(speedData+" "+ProvTrack.wasGeneratedBy + actACC);
+	
 	ProvTrack.addStatement(act+" "+ProvTrack.type+ProvTrack.Activity);
-	ProvTrack.addStatement(act+" "+ProvTrack.used+accData);
-	ProvTrack.addStatement(accData+" "+ProvTrack.type +ProvTrack.Entity);
-	ProvTrack.addStatement(accData+" "+ProvTrack.type +ProvTrack.PersonalData);
-	ProvTrack.addStatement(accData+" "+ProvTrack.description+"\\\"Acelerometer ranges\\\"^^xsd:string");
+	ProvTrack.addStatement(act+" "+ProvTrack.used+rawACCEnt);  //TODO get specific form simboxx
+//	ProvTrack.addStatement(accData+" "+ProvTrack.type +ProvTrack.Entity);
+//	ProvTrack.addStatement(accData+" "+ProvTrack.type +ProvTrack.PersonalData);
+//	ProvTrack.addStatement(accData+" "+ProvTrack.description+"\\\"Acelerometer ranges\\\"^^xsd:string");
 
 	
-	ProvTrack.addStatement(act+" "+ProvTrack.used+speedData);
-	ProvTrack.addStatement(speedData+" "+ProvTrack.type +ProvTrack.Entity);
-	ProvTrack.addStatement(speedData+" "+ProvTrack.type +ProvTrack.PersonalData);
-	ProvTrack.addStatement(speedData+" "+ProvTrack.description+"\\\"Speed\\\"^^xsd:string");
+	ProvTrack.addStatement(act+" "+ProvTrack.used+speed);
+//	ProvTrack.addStatement(speedData+" "+ProvTrack.type +ProvTrack.Entity);
+//	ProvTrack.addStatement(speedData+" "+ProvTrack.type +ProvTrack.PersonalData);
+//	ProvTrack.addStatement(speedData+" "+ProvTrack.description+"\\\"Speed\\\"^^xsd:string");
 	
-	ProvTrack.addStatement(usage+" "+ProvTrack.entity +speedData);
+	ProvTrack.addStatement(usage+" "+ProvTrack.entity +speed);
 	
 	ProvTrack.addStatement(usage+" "+ProvTrack.type+ProvTrack.Usage);
 	ProvTrack.addStatement(usage+" "+ProvTrack.purpose+"\\\"Using data to calculate premiums\\\"^^xsd:string");
-	ProvTrack.addStatement(usage+" "+ProvTrack.entity +accData);
-	ProvTrack.addStatement(usage+" "+ProvTrack.qualifiedUsage+ act);
+	ProvTrack.addStatement(usage+" "+ProvTrack.entity +rawACCEnt);
+	ProvTrack.addStatement(act+" "+ProvTrack.qualifiedUsage+ usage);
 	ProvTrack.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
 	
 	if(SHARE_DATA){
 		
-	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,accData);	
+	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt);	
 	
 	if(performance==-1){
 		System.out.println("No perf data available");
@@ -172,7 +191,16 @@ public class DataAnalyzer {
 	if(newP>currentP){
 System.err.println("New premiuim bigger");
 		String update="UPDATE clients SET premium=? WHERE id=?";
-	ProvTrack.addStatement(ProvTrack.bbox_ns+"NewPremium"+new Date().getTime() +" "+ProvTrack.wasGeneratedBy+act);
+		String preEnt=ProvTrack.bbox_ns+"NewPremium"+new Date().getTime();
+	ProvTrack.addStatement(preEnt +" "+ProvTrack.wasGeneratedBy+act);
+	ProvTrack.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.Entity);
+	ProvTrack.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.PersonalData);
+	ProvTrack.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.BillingData);
+	ProvTrack.addStatement(preEnt+" "+ProvTrack.description+"\\\"Insurance premium\\\"^^xsd:string");
+	
+	
+	
+	
 		try{
 		PreparedStatement p=DB.conn.prepareStatement(update);
 		p.setDouble(1, newP);
@@ -211,7 +239,7 @@ System.err.println("New premiuim bigger");
 		String body="{\"highturns\":\""+highTurns+"\",\"highbraking\":\""+highBraking+"\",\"prov\":\""+provDataRef+"\"}";
 		
 		try {
-		    HttpPost request = new HttpPost("http://localhost:8080/carmanufacturer/performance/");
+		    HttpPost request = new HttpPost("http://t3.abdn.ac.uk:8080/carmanufacturer/performance/");
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);

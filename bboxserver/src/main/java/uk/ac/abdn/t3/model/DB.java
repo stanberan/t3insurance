@@ -88,7 +88,7 @@ public class DB {
 				Date sentDate=new SimpleDateFormat("dd-mm-yy hh:mm:ss").parse(d.getTime());
 				
 				
-			PreparedStatement pStatement=conn.prepareStatement("INSERT into data values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement pStatement=conn.prepareStatement("INSERT into data values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			pStatement.setTimestamp(1,received);
 			pStatement.setString(2,d.getUniqueID());
 			pStatement.setString(3, d.getDevice_id());
@@ -112,6 +112,7 @@ public class DB {
 			pStatement.setFloat(21, d.getDistance());
 			pStatement.setFloat(22, d.getCornering_level());
 			pStatement.setFloat(23, d.getBraking_level());
+			pStatement.setString(24, d.getProvid());
 
 			int i= pStatement.executeUpdate();
 			System.out.println("Result is"+i);

@@ -2,7 +2,6 @@ package uk.ac.abdn.t3.model;
 
 import java.util.ArrayList;
 
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -31,7 +30,11 @@ public class ProvTrack {
     static String purpose=ttt_ns+"purpose ";
     static String description=ttt_ns+"description ";
     static String qualifiedUsage=prov_ns+"qualifiedUsage ";
-
+    static String Accelerometer=ttt_ns+"Accelerometer";
+    static String Location=ttt_ns+"Location";
+    static String Performance=ttt_ns+"Performance";
+    static String Speed=ttt_ns+"Speed";
+    static String BillingData=ttt_ns+"BillingData";
    static String SP=" ";
    static String DT=".";
    
@@ -69,7 +72,7 @@ System.out.println(body);
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
 		try {
-		    HttpPost request = new HttpPost("http://localhost:8080/t3v2/1/device/upload/"+Configuration.TTT_DEV_ID+"/prov");
+		    HttpPost request = new HttpPost("http://t3.abdn.ac.uk:8080/t3v2/1/device/upload/"+Configuration.TTT_DEV_ID+"/prov");
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);

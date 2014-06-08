@@ -14,6 +14,10 @@ public class SendMailTLS {
  
 	public void sendMail(String recipient,String body) {
  
+		
+		System.getProperties().put("proxySet","true");
+		   System.getProperties().put("proxyHost","proxy.abdn.ac.uk");
+		   System.getProperties().put("proxyPort",8080);
 		final String username = "contact@stanberan.org";
 		final String password = "xkvw7hp9qm";
  
