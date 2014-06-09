@@ -1,5 +1,7 @@
 package uk.ac.abdn.t3.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -9,9 +11,54 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
  
 public class SendMailTLS {
- 
+	
+	
+ public void sendMail(String recipient, String body){
+	 
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+	 try {
+		    HttpPost request = new HttpPost("http://homepages.abdn.ac.uk/e.pignotti/pages/t3_mail_notofication.php");
+		    StringEntity params = new StringEntity(body);
+		    String to=recipient;
+		    String subject="Your Premium has increased. ";
+		    String message=body;
+		    String key="FCEhJTkSNLuydXECDwjs7U9PDq1EgrO8";
+		    
+		    
+		    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+		      nameValuePairs.add(new BasicNameValuePair("to", to));
+		      nameValuePairs
+		          .add(new BasicNameValuePair("subject", subject));
+		      nameValuePairs.add(new BasicNameValuePair("message",message));
+		      nameValuePairs.add(new BasicNameValuePair("key",
+		         key));
+		     
+
+		      request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		   HttpResponse resp= httpClient.execute(request);
+		  System.out.println("StatusCode: "+ resp.getStatusLine().getStatusCode());
+	 }
+	 catch(Exception e){
+		 e.printStackTrace();
+	 }
+	 
+	 
+	 
+	 
+	 
+ }/*
 	public void sendMail(String recipient,String body) {
  
 		
@@ -19,8 +66,8 @@ public class SendMailTLS {
 		   System.getProperties().put("proxyHost","proxy.abdn.ac.uk");
 		   System.getProperties().put("proxyPort",8080);
 		final String username = "contact@stanberan.org";
-		final String password = "xkvw7hp9qm";
- 
+		final String password = "pass";   //this is not real.
+		
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
@@ -51,10 +98,11 @@ public class SendMailTLS {
 			throw new RuntimeException(e);
 		}
 	}
+	*/
 	public static void main(String args[]){
 		
 		new SendMailTLS().sendMail("contact@stanberan.org", "Hello from BBOX INSURE LTD.");
-		
+	
 		
 	}
 }

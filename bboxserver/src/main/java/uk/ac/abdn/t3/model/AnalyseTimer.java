@@ -38,7 +38,12 @@ ArrayList<Client> clients=DB.getDB().getClients();
 		}
     }
     }
-
+    
+    
+public void stopTimer(){
+	timer.cancel();
+	timer.purge();
+}
     public static void main(String[] args) {
     AnalyseTimer executingTask = new AnalyseTimer(1);
     executingTask.start();

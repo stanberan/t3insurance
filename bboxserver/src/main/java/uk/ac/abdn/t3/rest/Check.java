@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 
 
+
+
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,12 +25,14 @@ import uk.ac.abdn.t3.model.Client;
 import uk.ac.abdn.t3.model.DB;
 import uk.ac.abdn.t3.model.DataAnalyzer;
 import uk.ac.abdn.t3.model.ProvTrack;
+import uk.ac.abdn.t3.model.SendMailTLS;
 
 @Path("check")
 public class Check {
-
+	static  AnalyseTimer timer=null;
+		
 	  @GET
-	    @Path("performance/toggle")
+	    @Path("carmanufacturer/toggle")
 	    @Produces(MediaType.TEXT_PLAIN)
 	    public String activatePerf(){
 		 DataAnalyzer.SHARE_DATA=!DataAnalyzer.SHARE_DATA;
@@ -48,16 +53,34 @@ public class Check {
 		}
 		
 		return "Done";
-		
+	}
+		@GET
+		@Path("email/send")
+		public String check_email(){
+		SendMailTLS mail=new SendMailTLS();
+			
+	mail.sendMail("contact@stanberan.org", "This is a test message from bbox server.");
+			
+			return "Done";
 		
 	}
 	@GET
 	@Path("premiums/loop/{minutes}")
 	public String loop_premiums(@PathParam ("minutes") int minutes){
-		 AnalyseTimer timer=new AnalyseTimer(minutes);
+		timer=new AnalyseTimer(minutes);
 		timer.start();
 		
 		return "Timer Started";
+		
+		
+	}
+	@GET
+	@Path("premiums/stop/timer")
+	public String cancel(){
+	if(timer!=null){
+		timer.stopTimer();
+	}
+		return "Timer Stopped";
 		
 		
 	}

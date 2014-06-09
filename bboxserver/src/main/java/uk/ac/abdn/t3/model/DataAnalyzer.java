@@ -208,7 +208,7 @@ System.err.println("New premiuim bigger");
 		int i=p.executeUpdate();
 		if(i>0){
 			String message="Dear "+u.getLast_name()+",\n\n We are writing to you as your insurance premium has been increased due to your past "+
-					"driving behaviour.\n\n Old Premium:\t"+currentP +"\n UPDATED Premium:\t"+newP+"\n\nKind Regards\nINSUREBBOX LTD Financial Team";
+					"driving behaviour.\n\n Old Premium:\t£"+Math.round(currentP * 100.0) / 100.0 +"\n Your new Premium:\t£"+Math.round(newP * 100.0) / 100.0+"\n\nKind Regards\nINSUREBBOX LTD Financial Team";
 			new SendMailTLS().sendMail(u.getEmail(), message);
 			System.err.println("email sent...");
 		}
