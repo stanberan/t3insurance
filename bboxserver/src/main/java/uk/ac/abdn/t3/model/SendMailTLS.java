@@ -29,12 +29,12 @@ public class SendMailTLS {
 	 
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 	 try {
-		    HttpPost request = new HttpPost("http://homepages.abdn.ac.uk/e.pignotti/pages/t3_mail_notofication.php");
+		    HttpPost request = new HttpPost(Configuration.mailrequest);
 		    StringEntity params = new StringEntity(body);
 		    String to=recipient;
 		    String subject="Your Premium has increased. ";
 		    String message=body;
-		    String key="FCEhJTkSNLuydXECDwjs7U9PDq1EgrO8";
+		    String key=Configuration.authorizationKey;
 		    
 		    
 		    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
