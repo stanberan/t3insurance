@@ -23,7 +23,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
  
 public class SendMailTLS {
-	
+
 	
  public void sendMail(String recipient, String body){
 	 
@@ -57,14 +57,14 @@ public class SendMailTLS {
 	 
 	 
 	 
-	 
+	
  }/*
 	public void sendMail(String recipient,String body) {
  
 		
-		System.getProperties().put("proxySet","true");
-		   System.getProperties().put("proxyHost","proxy.abdn.ac.uk");
-		   System.getProperties().put("proxyPort",8080);
+		
+		   System.getProperties().put("http.proxyHost","proxy.abdn.ac.uk");
+		   System.setProperty("http.proxyPort",8080);
 		final String username = "contact@stanberan.org";
 		final String password = "pass";   //this is not real.
 		
@@ -97,8 +97,8 @@ public class SendMailTLS {
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	*/
+	}*/
+	
 	public static void main(String args[]){
 		
 		new SendMailTLS().sendMail("contact@stanberan.org", "Hello from BBOX INSURE LTD.");

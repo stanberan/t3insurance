@@ -50,7 +50,42 @@ public class ProvTrack {
 	}
 	
 	
+	public static void checkPolicy(){
+		
+		String prefixes="@prefix : <"+bbox_ns+"> . ";
+		String body="{\"body\":\"@prefix bbox: <"+bbox_prefix+"> ."+"@prefix prov: <"+prov_prefix+"> ."+"@prefix ttt: <"+ttt_prefix+"> ."+"@prefix xsd:<http://www.w3.org/2001/XMLSchema>.";
+				
+				
+				for (int i=0; i<provTrack.size();i++){
+					String line=provTrack.get(i);
+					body+=line+" .";		
+					
+				}
+		
+	//	provTrack.clear();
+		
+	 body+="\"}";
+System.out.println(body);
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+		try {
+		    HttpPost request = new HttpPost("http://t3.abdn.ac.uk:8080/t3v2/1/device/"+Configuration.TTT_DEV_ID+"/policy/check");
+		    StringEntity params = new StringEntity(body);
+		    request.addHeader("content-type", "application/json");
+		    request.setEntity(params);
+		   HttpResponse resp= httpClient.execute(request);
+		  System.out.println("StatusCode: "+ resp.getStatusLine().getStatusCode());
 	
+		} catch (Exception ex) {
+		   ex.printStackTrace();
+		} finally {
+		   // httpClient.close();
+		}
+		
+		
+		
+		
+	}
 	
 	
 	public static void sendProv(){

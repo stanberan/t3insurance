@@ -165,6 +165,7 @@ public class DataAnalyzer {
 		
 	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt);	
 	
+	
 	if(performance==-1){
 		System.out.println("No perf data available");
 	}
@@ -218,18 +219,19 @@ System.err.println("New premiuim bigger");
 	
 		
 		
+		
 	}
 	ProvTrack.sendProv();    //send prov to T3
 	}
 	else{
 		System.err.println("No data generated in last ten minutes nothing to check");
-		System.out.println("No data generated in last ten minutes nothing to check");
+	}
 	}
 	
 	
-
+	
 		
-	}
+
 	
 
 	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef){
@@ -270,5 +272,6 @@ System.err.println("New premiuim bigger");
 		
 		return -1;
 		
-	}
+	
 }
+	}
