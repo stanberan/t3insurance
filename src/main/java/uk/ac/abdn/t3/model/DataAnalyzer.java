@@ -44,6 +44,8 @@ public class DataAnalyzer {
    String usage;
    String provid;
 	public void calculatePremium(Client u){	
+		ProvTrack track=new ProvTrack(u.getDeviceid());
+		
 		int low_turns=0 ;     // 1.001; %
 		int medium_turns=0;   // 1.003; %
 		int high_turns=0;     //1.01;   %
@@ -62,7 +64,7 @@ public class DataAnalyzer {
 		
 		String deviceid=u.getDeviceid();
 		//last ten minutes
-		String query="SELECT * FROM data WHERE tsreceived>=NOW() - INTERVAL 10 MINUTE AND deviceid=?";
+		String query="SELECT * FROM data WHERE tsreceived>=NOW() - INTERVAL 30 MINUTE AND deviceid=?";
 	try{
 		if(DB.conn.isClosed()){
 			DB.conn=DriverManager.getConnection(Configuration.url+Configuration.dbName,Configuration.userName,Configuration.password);
@@ -136,34 +138,34 @@ public class DataAnalyzer {
 	
 	
 	
-//	ProvTrack.addStatement(actACC+" "+ProvTrack.type+ProvTrack.Activity);
-//	ProvTrack.addStatement(actACC+" "+ProvTrack.wasAssociatedWith + agent_resource);
-//	ProvTrack.addStatement(accData+" "+ProvTrack.wasGeneratedBy + actACC);
-//	ProvTrack.addStatement(speedData+" "+ProvTrack.wasGeneratedBy + actACC);
+//	track.addStatement(actACC+" "+ProvTrack.type+track.activity);
+//	track.addStatement(actACC+" "+ProvTrack.wasAssociatedWith + agent_resource);
+//	track.addStatement(accData+" "+ProvTrack.wasGeneratedBy + actACC);
+//	track.addStatement(speedData+" "+ProvTrack.wasGeneratedBy + actACC);
 	
-	ProvTrack.addStatement(act+" "+ProvTrack.type+ProvTrack.Activity);
-	ProvTrack.addStatement(act+" "+ProvTrack.used+rawACCEnt);  //TODO get specific form simboxx
-//	ProvTrack.addStatement(accData+" "+ProvTrack.type +ProvTrack.Entity);
-//	ProvTrack.addStatement(accData+" "+ProvTrack.type +ProvTrack.PersonalData);
-//	ProvTrack.addStatement(accData+" "+ProvTrack.description+"\\\"Acelerometer ranges\\\"^^xsd:string");
+	track.addStatement(act+" "+ProvTrack.type+ProvTrack.Activity);
+	track.addStatement(act+" "+ProvTrack.used+rawACCEnt);  //TODO get specific form simboxx
+//	track.addStatement(accData+" "+ProvTrack.type +ProvTrack.Entity);
+//	track.addStatement(accData+" "+ProvTrack.type +ProvTrack.PersonalData);
+//	track.addStatement(accData+" "+ProvTrack.description+"\\\"Acelerometer ranges\\\"^^xsd:string");
 
 	
-	ProvTrack.addStatement(act+" "+ProvTrack.used+speed);
-//	ProvTrack.addStatement(speedData+" "+ProvTrack.type +ProvTrack.Entity);
-//	ProvTrack.addStatement(speedData+" "+ProvTrack.type +ProvTrack.PersonalData);
-//	ProvTrack.addStatement(speedData+" "+ProvTrack.description+"\\\"Speed\\\"^^xsd:string");
+	track.addStatement(act+" "+ProvTrack.used+speed);
+//	track.addStatement(speedData+" "+ProvTrack.type +ProvTrack.Entity);
+//	track.addStatement(speedData+" "+ProvTrack.type +ProvTrack.PersonalData);
+//	track.addStatement(speedData+" "+ProvTrack.description+"\\\"Speed\\\"^^xsd:string");
 	
-	ProvTrack.addStatement(usage+" "+ProvTrack.entity +speed);
+	track.addStatement(usage+" "+ProvTrack.entity +speed);
 	
-	ProvTrack.addStatement(usage+" "+ProvTrack.type+ProvTrack.Usage);
-	ProvTrack.addStatement(usage+" "+ProvTrack.purpose+"\\\"Using data to calculate premiums\\\"^^xsd:string");
-	ProvTrack.addStatement(usage+" "+ProvTrack.entity +rawACCEnt);
-	ProvTrack.addStatement(act+" "+ProvTrack.qualifiedUsage+ usage);
-	ProvTrack.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
+	track.addStatement(usage+" "+ProvTrack.type+ProvTrack.Usage);
+	track.addStatement(usage+" "+ProvTrack.purpose+"\\\"Using data to calculate premiums\\\"^^xsd:string");
+	track.addStatement(usage+" "+ProvTrack.entity +rawACCEnt);
+	track.addStatement(act+" "+ProvTrack.qualifiedUsage+ usage);
+	track.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
 	
 	if(SHARE_DATA){
-		
-	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt);	
+		//track.addprospective(devid)
+	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track);	
 	
 	
 	if(performance==-1){
@@ -193,11 +195,11 @@ public class DataAnalyzer {
 System.err.println("New premiuim bigger");
 		String update="UPDATE clients SET premium=? WHERE id=?";
 		String preEnt=ProvTrack.bbox_ns+"NewPremium"+new Date().getTime();
-	ProvTrack.addStatement(preEnt +" "+ProvTrack.wasGeneratedBy+act);
-	ProvTrack.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.Entity);
-	ProvTrack.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.PersonalData);
-	ProvTrack.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.BillingData);
-	ProvTrack.addStatement(preEnt+" "+ProvTrack.description+"\\\"Insurance premium\\\"^^xsd:string");
+	track.addStatement(preEnt +" "+ProvTrack.wasGeneratedBy+act);
+	track.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.Entity);
+	track.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.PersonalData);
+	track.addStatement(preEnt+" "+ProvTrack.type +ProvTrack.BillingData);
+	track.addStatement(preEnt+" "+ProvTrack.description+"\\\"Insurance premium\\\"^^xsd:string");
 	
 	
 	
@@ -209,7 +211,7 @@ System.err.println("New premiuim bigger");
 		int i=p.executeUpdate();
 		if(i>0){
 			String message="Dear "+u.getLast_name()+",\n\n We are writing to you as your insurance premium has been increased due to your past "+
-					"driving behaviour.\n\n Old Premium:\t£"+Math.round(currentP * 100.0) / 100.0 +"\n Your new Premium:\t£"+Math.round(newP * 100.0) / 100.0+"\n\nKind Regards\nINSUREBBOX LTD Financial Team";
+					"driving behaviour.\n\n Old Premium: £"+Math.round(currentP * 100.0) / 100.0 +"\n Your new Premium: £"+Math.round(newP * 100.0) / 100.0+"\n\nKind Regards,\nINSUREBBOX LTD Financial Team";
 			new SendMailTLS().sendMail(u.getEmail(), message);
 			System.err.println("email sent...");
 		}
@@ -221,7 +223,8 @@ System.err.println("New premiuim bigger");
 		
 		
 	}
-	ProvTrack.sendProv();    //send prov to T3
+	track.sendProv();    //send prov to T3
+	track=null;
 	}
 	else{
 		System.err.println("No data generated in last ten minutes nothing to check");
@@ -234,7 +237,7 @@ System.err.println("New premiuim bigger");
 
 	
 
-	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef){
+	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef, ProvTrack track){
 		
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
@@ -256,8 +259,8 @@ System.err.println("New premiuim bigger");
 		 System.out.println("Prov Data from Manufacturer:"+genData);
 		
 		 //add to prov
-		 ProvTrack.addStatement(act+" "+ProvTrack.used+genData);
-		ProvTrack.addStatement(usage+" "+ProvTrack.entity +genData);
+		 track.addStatement(act+" "+ProvTrack.used+genData);
+		track.addStatement(usage+" "+ProvTrack.entity +genData);
 		 
 		 return p;
 		  
