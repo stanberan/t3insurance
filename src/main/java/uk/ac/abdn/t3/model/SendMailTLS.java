@@ -29,8 +29,11 @@ public class SendMailTLS {
 	 
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 	 try {
+
+		   System.getProperties().put("http.proxyHost","proxy.abdn.ac.uk");
+		   System.getProperties().put("http.proxyPort",8080);
 		    HttpPost request = new HttpPost(Configuration.mailrequest);
-		    StringEntity params = new StringEntity(body);
+		  //  StringEntity params = new StringEntity(body);
 		    String to=recipient;
 		    String subject="Your Premium has increased. ";
 		    String message=body;

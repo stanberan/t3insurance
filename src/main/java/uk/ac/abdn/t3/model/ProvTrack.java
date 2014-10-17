@@ -18,6 +18,7 @@ public class ProvTrack {
 	public static String bbox_ns="bbox:";
 	
 	String devid;
+	static String host="t3.abdn.ac.uk";
 	String bbox_prefix;
 	ArrayList<String> provTrack=new ArrayList<String>();
 	
@@ -76,7 +77,7 @@ System.out.println(body);
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
 		try {
-		    HttpPost request = new HttpPost("http://t3.abdn.ac.uk:8080/t3v2/1/device/"+devid+"/policy/check");
+		    HttpPost request = new HttpPost("http://"+host+":8080/t3v2/1/device/"+devid+"/policy/check");
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);
@@ -114,7 +115,7 @@ System.out.println(body);
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
 		try {
-		    HttpPost request = new HttpPost("http://t3.abdn.ac.uk:8080/t3v2/1/device/upload/"+devid+"/prov");
+		    HttpPost request = new HttpPost("http://"+host+":8080/t3v2/1/device/upload/"+devid+"/prov");
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);

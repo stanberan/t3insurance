@@ -110,9 +110,10 @@ public class DataAnalyzer {
 				first=false;
 			provid=rs.getString("provid");
 			}
+			first=true;
 		}
 	
-		if(provid.equals("")){return;}
+		if(provid==null){return;}
 		
 	}
 	catch(Exception e){
@@ -165,7 +166,7 @@ public class DataAnalyzer {
 	
 	if(SHARE_DATA){
 		//track.addprospective(devid)
-	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track);	
+	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track,deviceid);	
 	
 	
 	if(performance==-1){
@@ -237,14 +238,14 @@ System.err.println("New premiuim bigger");
 
 	
 
-	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef, ProvTrack track){
+	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef, ProvTrack track,String devid){
 		
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-		String body="{\"highturns\":\""+highTurns+"\",\"highbraking\":\""+highBraking+"\",\"prov\":\""+provDataRef+"\"}";
+		String body="{\"highturns\":\""+highTurns+"\",\"highbraking\":\""+highBraking+"\",\"devid\":\""+devid+"\",\"prov\":\""+provDataRef+"\"}";
 		
 		try {
-		    HttpPost request = new HttpPost("http://t3.abdn.ac.uk:8080/carmanufacturer/performance/");
+		    HttpPost request = new HttpPost("http://"+ProvTrack.host+":8080/carmanufacturer/performance/");
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);
