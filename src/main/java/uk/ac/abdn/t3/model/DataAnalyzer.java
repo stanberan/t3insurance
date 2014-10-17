@@ -40,11 +40,13 @@ public class DataAnalyzer {
 	
 	DB db=DB.getDB();
 
-   String act;
-   String usage;
-   String provid;
+  
 	public void calculatePremium(Client u){	
 		ProvTrack track=new ProvTrack(u.getDeviceid());
+		 String act;
+		   String usage;
+		   String provid="";
+		usage=ProvTrack.bbox_ns+"Usage"+new Date().getTime();
 		
 		int low_turns=0 ;     // 1.001; %
 		int medium_turns=0;   // 1.003; %
@@ -113,7 +115,7 @@ public class DataAnalyzer {
 			first=true;
 		}
 	
-		if(provid==null){return;}
+		if(provid.equals("")){return;}
 		
 	}
 	catch(Exception e){
@@ -166,7 +168,7 @@ public class DataAnalyzer {
 	
 	if(SHARE_DATA){
 		//track.addprospective(devid)
-	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track,deviceid);	
+	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track,deviceid,act,usage);	
 	
 	
 	if(performance==-1){
@@ -238,7 +240,7 @@ System.err.println("New premiuim bigger");
 
 	
 
-	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef, ProvTrack track,String devid){
+	public int getPerformanceDataFromManufacturer(int highTurns,int highBraking, String provDataRef, ProvTrack track,String devid, String act, String usage){
 		
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
