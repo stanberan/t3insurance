@@ -110,12 +110,12 @@ public class DataAnalyzer {
 			}
 			if(first){
 				first=false;
-			provid=rs.getString("provid");
+		//	provid=rs.getString("provid");
 			}
 			first=true;
 		}
 	
-		if(provid.equals("")){return;}
+//		if(provid.equals("")){return;}
 		
 	}
 	catch(Exception e){
@@ -264,6 +264,7 @@ System.err.println("New premiuim bigger");
 		 //add to prov
 		 track.addStatement(act+" "+ProvTrack.used+genData);
 		track.addStatement(usage+" "+ProvTrack.entity +genData);
+		track.addStatement("bbox:CarManufacturer ttt:test bbox:CarManufacturer" );
 		 
 		 return p;
 		  
