@@ -110,12 +110,12 @@ public class DataAnalyzer {
 			}
 			if(first){
 				first=false;
-		//	provid=rs.getString("provid");
+			provid=rs.getString("provid");
 			}
-			first=true;
+			
 		}
 	
-//		if(provid.equals("")){return;}
+		if(provid.equals("")){return;}
 		
 	}
 	catch(Exception e){
