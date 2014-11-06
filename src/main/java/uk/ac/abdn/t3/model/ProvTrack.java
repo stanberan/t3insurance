@@ -58,7 +58,7 @@ public class ProvTrack {
 	}
 	
 	
-	public void checkPolicy(){
+	public void checkPolicy(ArrayList<String> additional){
 		
 	//	String prefixes="@prefix : <"+bbox_ns+"> . ";
 		String body="{\"body\":\"@prefix bbox: <"+bbox_prefix+"> ."+"@prefix prov: <"+prov_prefix+"> ."+"@prefix ttt: <"+ttt_prefix+"> ."+"@prefix xsd:<http://www.w3.org/2001/XMLSchema>.";
@@ -66,6 +66,11 @@ public class ProvTrack {
 				
 				for (int i=0; i<provTrack.size();i++){
 					String line=provTrack.get(i);
+					body+=line+" .";		
+					
+				}
+				for (int i=0; i<additional.size();i++){
+					String line=additional.get(i);
 					body+=line+" .";		
 					
 				}

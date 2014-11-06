@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -66,7 +67,7 @@ public class DataAnalyzer {
 		
 		String deviceid=u.getDeviceid();
 		//last ten minutes
-		String query="SELECT * FROM data WHERE tsreceived>=NOW() - INTERVAL 30 MINUTE AND deviceid=?";
+		String query="SELECT * FROM data WHERE tsreceived>=NOW() - INTERVAL 30 MINUTE AND deviceid=? ORDER BY tsreceived DESC";
 	try{
 		if(DB.conn.isClosed()){
 			DB.conn=DriverManager.getConnection(Configuration.url+Configuration.dbName,Configuration.userName,Configuration.password);
@@ -167,7 +168,12 @@ public class DataAnalyzer {
 	track.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
 	
 	if(SHARE_DATA){
-		//track.addprospective(devid)
+		//track.addpros
+		//check policy
+	ArrayList<String> checkPolicy =new ArrayList<String>();
+
+		
+		
 	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track,deviceid,act,usage);	
 	
 	
@@ -233,7 +239,6 @@ System.err.println("New premiuim bigger");
 		System.err.println("No data generated in last ten minutes nothing to check");
 	}
 	}
-	
 	
 	
 		
