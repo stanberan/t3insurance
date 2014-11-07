@@ -7,6 +7,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 public class ProvTrack {
 	
@@ -58,7 +60,7 @@ public class ProvTrack {
 	}
 	
 	
-	public void checkPolicy(ArrayList<String> additional){
+	public boolean checkPolicy(ArrayList<String> prospective){
 		
 	//	String prefixes="@prefix : <"+bbox_ns+"> . ";
 		String body="{\"body\":\"@prefix bbox: <"+bbox_prefix+"> ."+"@prefix prov: <"+prov_prefix+"> ."+"@prefix ttt: <"+ttt_prefix+"> ."+"@prefix xsd:<http://www.w3.org/2001/XMLSchema>.";
@@ -69,12 +71,13 @@ public class ProvTrack {
 					body+=line+" .";		
 					
 				}
-				for (int i=0; i<additional.size();i++){
-					String line=additional.get(i);
+				if(prospective!=null){
+				for (int i=0; i<prospective.size();i++){
+					String line=prospective.get(i);
 					body+=line+" .";		
 					
 				}
-		
+				}
 
 		
 	 body+="\"}";
@@ -82,15 +85,24 @@ System.out.println(body);
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
 		try {
-		    HttpPost request = new HttpPost("http://"+host+":8080/t3v2/1/device/"+devid+"/policy/check");
+		    HttpPost request = new HttpPost("http://"+host+":8080/t3v2/1/device/check/policy/"+devid);
 		    StringEntity params = new StringEntity(body);
 		    request.addHeader("content-type", "application/json");
 		    request.setEntity(params);
 		   HttpResponse resp= httpClient.execute(request);
 		  System.out.println("StatusCode: "+ resp.getStatusLine().getStatusCode());
+		 JSONObject response=new JSONObject( EntityUtils.toString(resp.getEntity()));
+		 if(response.getBoolean("isViolated")){
+			 System.out.println("VIOLATION of THE POLICY");
+			 return true;
+		 }
+		   System.out.println("No violation of policy...");
+		 return false;
 	
 		} catch (Exception ex) {
 		   ex.printStackTrace();
+		   System.out.println("Policy check went wrong...");
+		   return false;
 		} finally {
 		   // httpClient.close();
 		}

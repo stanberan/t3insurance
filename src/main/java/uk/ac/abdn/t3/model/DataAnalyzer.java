@@ -168,9 +168,10 @@ public class DataAnalyzer {
 	track.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
 	
 	if(SHARE_DATA){
-		//track.addpros
-		//check policy
-	ArrayList<String> checkPolicy =new ArrayList<String>();
+		//if policy not violated or could not check policy
+		//for prospective provenance add array of Strings each representing triple in TTL format
+		//namespaces supported for simplicity
+    if(!track.checkPolicy(null)){
 
 		
 		
@@ -191,7 +192,7 @@ public class DataAnalyzer {
 		
 	}
 	
-		
+    }
 		
 		
 		
