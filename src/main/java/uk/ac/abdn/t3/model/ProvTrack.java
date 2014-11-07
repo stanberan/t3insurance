@@ -91,7 +91,9 @@ System.out.println(body);
 		    request.setEntity(params);
 		   HttpResponse resp= httpClient.execute(request);
 		  System.out.println("StatusCode: "+ resp.getStatusLine().getStatusCode());
-		 JSONObject response=new JSONObject( EntityUtils.toString(resp.getEntity()));
+		  String respo=EntityUtils.toString(resp.getEntity());
+		  System.out.println("PolicyResponse"+respo);
+		 JSONObject response=new JSONObject( respo);
 		 if(response.getBoolean("isViolated")){
 			 System.out.println("VIOLATION of THE POLICY");
 			 return true;
