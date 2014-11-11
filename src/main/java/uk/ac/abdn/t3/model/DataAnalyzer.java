@@ -149,6 +149,7 @@ public class DataAnalyzer {
 	
 	track.addStatement(act+" "+ProvTrack.type+ProvTrack.Activity);
 	track.addStatement(act+" "+ProvTrack.used+rawACCEnt);  //TODO get specific form simboxx
+	track.addStatement(rawACCEnt+" "+ProvTrack.wasGeneratedBy+act);
 //	track.addStatement(accData+" "+ProvTrack.type +ProvTrack.Entity);
 //	track.addStatement(accData+" "+ProvTrack.type +ProvTrack.PersonalData);
 //	track.addStatement(accData+" "+ProvTrack.description+"\\\"Acelerometer ranges\\\"^^xsd:string");
@@ -270,6 +271,7 @@ System.err.println("New premiuim bigger");
 		 //add to prov
 		 track.addStatement(act+" "+ProvTrack.used+genData);
 		track.addStatement(usage+" "+ProvTrack.entity +genData);
+		//to acknowledge new agent
 		track.addStatement("bbox:CarManufacturer ttt:test bbox:CarManufacturer" );
 		 
 		 return p;
