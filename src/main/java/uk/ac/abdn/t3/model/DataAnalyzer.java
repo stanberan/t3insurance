@@ -42,7 +42,12 @@ public class DataAnalyzer {
 	DB db=DB.getDB();
 
   
-	public void calculatePremium(Client u){	
+	public void calculatePremium(Client u){
+		boolean violated=false;
+		boolean shared=false;
+		boolean policycheck=false;
+		long startTime=System.currentTimeMillis();
+		
 		ProvTrack track=new ProvTrack(u.getDeviceid());
 		 String act;
 		   String usage;
@@ -169,11 +174,13 @@ public class DataAnalyzer {
 	track.addStatement(act+" "+ProvTrack.wasAssociatedWith + agent_resource);
 	
 	if(SHARE_DATA){
+		shared=true;
 		//if policy not violated or could not check policy
 		//for prospective provenance add array of Strings each representing triple in TTL format
 		//namespaces supported for simplicity
+		policycheck=true;
     if(!track.checkPolicy(null)){
-
+		violated=false;
 		
 		
 	int performance=getPerformanceDataFromManufacturer(high_turns,high_braking,rawACCEnt,track,deviceid,act,usage);	
@@ -193,6 +200,9 @@ public class DataAnalyzer {
 		
 	}
 	
+ }
+    else{
+    	violated=true;
     }
 		
 		
@@ -200,6 +210,9 @@ public class DataAnalyzer {
 		
 		
 		
+	}
+	else{
+		shared=false;
 	}
 	
 	if(newP>currentP){
@@ -240,6 +253,11 @@ System.err.println("New premiuim bigger");
 	else{
 		System.err.println("No data generated in last ten minutes nothing to check");
 	}
+	long endtime=System.currentTimeMillis();
+	long totalTime=endtime-startTime;
+	db.trackIteration(u.getDeviceid(),totalTime,shared,policycheck,violated);
+	
+
 	}
 	
 	

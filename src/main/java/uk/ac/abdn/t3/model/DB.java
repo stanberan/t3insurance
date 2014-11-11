@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 
+
 public class DB {
 	static{
 		System.setProperty("http.proxyHost", "proxy.abdn.ac.uk");
@@ -76,6 +77,27 @@ public class DB {
 		 
 		 
 	 }
+	 public void trackIteration(String devid,long totalTime,boolean shared,boolean policycheck, boolean violated){
+			Timestamp ts=new Timestamp(new Date().getTime());
+			try{
+			if(conn.isClosed()){
+				conn=DriverManager.getConnection(Configuration.url+Configuration.dbName,Configuration.userName,Configuration.password);
+			}
+			PreparedStatement pStatement=conn.prepareStatement("INSERT into trackinsurance values(?,?,?,?,?,?)");
+			pStatement.setTimestamp(1,ts);
+			pStatement.setLong(2, totalTime);
+			pStatement.setBoolean(3, shared);
+			pStatement.setBoolean(4, policycheck);
+			pStatement.setBoolean(5, violated);
+			pStatement.setString(6, devid);
+			int i= pStatement.executeUpdate();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+	 }
+	 
+	 
 	 public int registerData(BboxData d) {
 		 
 			try{
